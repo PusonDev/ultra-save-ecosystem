@@ -1,0 +1,60 @@
+MediaDrop Implementation Plan
+This document outlines the proposed development plan for the MediaDrop ecosystem, based on the provided Master Context Document.
+
+User Review Required
+IMPORTANT
+
+Since this is a massive ecosystem encompassing three distinct products (Windows, Android, Website), we need to decide which part to build first. I propose we start with the Windows Application (EXE) because it establishes the core Python backend (yt-dlp + ffmpeg integration) that we can rigorously test before transitioning to the Android build.
+
+Puson, please review the plan below and let me know if you agree to start with the Windows Application first, or if you prefer to start with the Website or Android app.
+
+Proposed Changes
+We will create separate folders within your main project directory for each product, as outlined in your file structure.
+
+Phase 1: Windows Application (MediaDrop.exe)
+Goal: Build an Electron + React (Vite) desktop application with an embedded Python engine for yt-dlp & ffmpeg.
+Architecture:
+UI built with React + Tailwind CSS according to the Dark/Light design system.
+IPC bridges to communicate between the React frontend and the Electron main process.
+A bundled Python environment shipping yt-dlp.exe and ffmpeg.exe to handle fetching and downloading without relying on user installations.
+Key Tasks:
+Initialize Vite + React project and wrap it in Electron.
+Implement the UI layouts (Home, Queue, History, Settings).
+Create the downloader.py backend.
+Develop the IPC handlers to spawn Python processes and parse the real-time standard output for progress bars.
+Setup electron-builder for NSIS Installer and Portable builds.
+Integrate the 90px bottom bar WebView for AdSense.
+Location: mediadrop-windows/
+Phase 2: Website Layout (mediadrop.site)
+Goal: Build a Next.js landing page for distributing the apps.
+Architecture: Next.js (App Router), styled with Tailwind CSS, deployed on Vercel.
+Key Tasks:
+Initialize Next.js app.
+Implement SEO best practices (llms.txt, JSON-LD schema, canonical URLs, core web vitals).
+Build the responsive landing page, features section, and FAQ.
+Add placeholder download buttons for the Windows and Android apps.
+Implement the frame to supply AdSense banners to the Windows app WebView.
+Location: mediadrop-website/
+Phase 3: Android Application (MediaDrop.apk)
+Goal: Build a Flutter (Dart) mobile app utilizing Material 3.
+Architecture: Flutter app tracking background tasks, running a bundled ARM binary of yt-dlp.
+Key Tasks:
+Initialize Flutter project.
+Develop the UI (9:16 portrait layout with Bottom Navigation).
+Integrate Process.run() to execute standard ARM yt-dlp binary.
+Implement background download persistence and storage permissions (Android 11+).
+Incorporate google_mobile_ads for AdMob banners and rewarded video functionality.
+Location: mediadrop-android/
+Open Questions
+NOTE
+
+Which part of the ecosystem (Windows App, Android App, or Website) would you like me to create the initial foundation for today?
+
+Verification Plan
+Automated Tests
+Running the yt-dlp wrapper scripts locally to ensure accurate parsing of download progress, speed, and ETA outputs.
+Running linter/formatter (ESLint, Prettier) checks for code quality.
+Manual Verification
+Testing the Electron output .exe on a Windows environment to confirm it behaves correctly completely standalone (ignoring local system Python/ffmpeg).
+Validating the local storage persistence of dark/light themes.
+Downloading video ranges and playlists to measure UI responsiveness under heavy multi-threading.

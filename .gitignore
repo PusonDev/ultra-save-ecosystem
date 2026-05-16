@@ -1,0 +1,41 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Next.js build output
+.next/
+out/
+
+# Build outputs
+build/
+dist/
+bin/
+obj/
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+ultrasave-android/.dart_tool/
+ultrasave-android/.packages
+ultrasave-android/.pub/
+ultrasave-android/build/

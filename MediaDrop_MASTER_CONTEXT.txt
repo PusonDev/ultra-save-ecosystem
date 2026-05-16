@@ -1,0 +1,393 @@
+# 📋 MEDIADROP — MASTER CONTEXT DOCUMENT
+### Use this file at the start of ANY new Claude chat
+### Paste this and say: "Read this fully, then help me continue."
+### Version: Final v1.0
+
+---
+
+## 👤 WHO I AM
+
+- Name: Puson
+- Location: Dhaka, Bangladesh
+- Background: B.Sc. CSE student at BIST + Independent IT Specialist
+- Skills: PC hardware (AMD/MSI), WordPress, content creation
+- YouTube channel: BABA PUSON ( https://www.youtube.com/@babapuson8897 )
+- Communication style: Casual, mix of Bengali + English + hindi + urdu. Direct. No fluff.
+
+---
+
+## 🎯 MY PROJECT: MEDIADROP
+
+A **free social media video & audio downloader ecosystem.**
+User pays nothing. I earn from halal ads.
+
+### 3 Products:
+
+| # | Product | Platform | Tech | Ads |
+|---|---|---|---|---|
+| 1 | **MediaDrop.exe** | Windows PC | Electron + React + Python/yt-dlp | AdSense via WebView |
+| 2 | **MediaDrop.apk** | Android | Flutter + yt-dlp ARM binary | Google AdMob |
+| 3 | **mediadrop.site** | Web (landing only) | Next.js + Vercel | Google AdSense |
+
+### Core Principle:
+> yt-dlp runs on USER's device — not my server. So no IP ban, zero server cost, works forever regardless of traffic. This is critical. Website does NOT download videos — it only distributes the apps.
+
+---
+
+## 🛠️ TECH STACK
+
+### Windows EXE:
+- **UI:** Electron + React + Vite + Tailwind CSS
+- **Engine:** Python 3.11 embedded + yt-dlp.exe + ffmpeg.exe (all bundled — user installs nothing)
+- **IPC:** Electron main ↔ renderer ↔ Python child process
+- **Ads:** WebView loading AdSense banner page (90px bottom bar)
+- **Builds:** MediaDrop-Setup.exe (NSIS installer) + MediaDrop-Portable.exe
+
+### Android APK:
+- **Framework:** Flutter (Dart) + Material 3
+- **Engine:** yt-dlp ARM binary bundled in assets, executed via Process.run()
+- **Ads:** google_mobile_ads package (AdMob)
+- **Build:** flutter build apk --release
+
+### Website:
+- **Framework:** Next.js (React)
+- **Hosting:** Vercel (FREE)
+- **Domain:** mediadrop.site (~$3/year from Porkbun)
+- **Ads:** Google AdSense
+- **Purpose:** Landing page + app download hub only. No video downloading.
+
+---
+
+## 🎨 DESIGN SYSTEM
+
+- **App Name:** MediaDrop
+- **Tagline:** "Download Anything. Keep Everything."
+- **Logo:** Down arrow + play button merged
+
+### Colors:
+```
+Accent:        #6c63ff
+Accent Hover:  #7b73ff
+Dark BG:       #0f0f13
+Dark Card:     #1a1a24
+Light BG:      #f4f4f8
+Light Card:    #ffffff
+Success:       #22c55e
+Error:         #ef4444
+Text Dark:     #f0f0f5
+Text Light:    #111118
+```
+
+### Fonts:
+- Headings: Syne (Google Fonts)
+- Body: DM Sans (Google Fonts)
+
+### Theme: Dark/Light toggle. Dark = default. Persists via localStorage.
+
+---
+
+## 📱 UI LAYOUTS
+
+### Windows Main Screen:
+```
+┌──────────────────────────────────────────┐
+│ 🎬 MediaDrop          [🌙] [⚙] [— □ ✕] │
+├──────────────────────────────────────────┤
+│  [🔗 Paste link...                  📋]  │
+│           [ FETCH INFO ]                 │
+│  [Thumbnail | Title | Duration | Platform]│
+│  VIDEO: ○4K ●1080p ○720p ○480p ○360p   │
+│  AUDIO: ○MP3 320k ○MP3 192k ○M4A Best  │
+│  SUBTITLE: ○None ○English ○Bengali      │
+│  📁 Save to: [path]              [📂]   │
+│         [ ⬇ DOWNLOAD NOW ]              │
+├──────────────────────────────────────────┤
+│  ████████░░ 67% • 3.2MB/s • ETA 12s    │
+├──────────────────────────────────────────┤
+│         AdSense Banner (WebView 90px)    │
+└──────────────────────────────────────────┘
+Tabs: Home | Queue | History | Settings
+```
+
+### Android Screen (9:16):
+```
+┌──────────────────┐
+│ 🎬 MediaDrop  ⚙ │
+├──────────────────┤
+│  [🔗 Paste link] │
+│   [FETCH INFO]   │
+│  [thumb | Title] │
+│  ○4K ●1080 ○720  │
+│  ○480 ○360 ○240  │
+│  ○MP3 ○M4A       │
+│  [⬇ DOWNLOAD]   │
+│  ████░░ 67%      │
+│  3.2MB/s ETA 12s │
+├──────────────────┤
+│  AdMob Banner    │ ← 50dp, always visible
+└──────────────────┘
+Bottom Nav: 🏠 Queue History Settings
+```
+
+---
+
+## ⚙️ CORE FEATURES
+
+### Both Platforms:
+- Auto clipboard paste on app open
+- Platform icon detection (YouTube/TikTok/Instagram etc.)
+- Fetch video info → show thumbnail, title, duration
+- Dynamic quality selector (only show available qualities)
+- Video download: 4K / 1080p / 720p / 480p / 360p / 240p
+- Audio download: MP3 320kbps / 192kbps / 128kbps / M4A Best
+- Subtitle download (language selector)
+- Playlist detection + bulk/range/individual select
+- Real-time progress (%, speed MB/s, ETA)
+- Multi-thread: --concurrent-fragments 8
+- Resume support: --continue
+- Download queue (5 simultaneous)
+- Download history
+- Dark/Light theme toggle
+- Auto yt-dlp update (weekly background)
+- Friendly error messages (no raw Python errors)
+
+### Windows Extra:
+- Folder picker (save location)
+- Queue management (pause/cancel/reorder)
+- History: open file / open in Explorer
+- Settings: folder, concurrent limit, theme, proxy
+- Keyboard shortcut: Ctrl+V = paste + fetch
+- Custom frameless titlebar
+
+### Android Extra:
+- Share sheet: share from browser → MediaDrop → download
+- Background download (continues when minimized)
+- Download complete notification
+- Storage permission handling (Android 11+)
+
+### Rewarded Ads (Android — bonus income):
+```
+"Watch a short ad to unlock Playlist download / Subtitle / 3+ simultaneous"
+```
+User chooses to watch → no annoyance → more income.
+
+---
+
+## 🐍 PYTHON BACKEND (downloader.py)
+
+```python
+import sys, subprocess, json, os
+
+BIN_PATH = os.path.join(os.path.dirname(__file__), 'bin')
+YTDLP = os.path.join(BIN_PATH, 'yt-dlp')
+FFMPEG = BIN_PATH
+
+def fetch_info(url):
+    result = subprocess.run(
+        [YTDLP, '--dump-json', '--no-playlist', url],
+        capture_output=True, text=True
+    )
+    return json.loads(result.stdout)
+
+def download(url, fmt, output_path, subtitle=None):
+    cmd = [
+        YTDLP, '-f', fmt,
+        '--merge-output-format', 'mp4',
+        '--ffmpeg-location', FFMPEG,
+        '--concurrent-fragments', '8',
+        '--continue', '--newline',
+        '-o', os.path.join(output_path, '%(title)s.%(ext)s'),
+        url
+    ]
+    if subtitle and subtitle != 'none':
+        cmd += ['--write-sub', '--sub-lang', subtitle, '--convert-subs', 'srt']
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    for line in process.stdout:
+        print(line, flush=True)
+    process.wait()
+    return process.returncode
+
+def auto_update():
+    subprocess.run([YTDLP, '-U'], capture_output=True)
+
+if __name__ == '__main__':
+    action = sys.argv[1]
+    if action == 'info':
+        print(json.dumps(fetch_info(sys.argv[2])))
+    elif action == 'download':
+        download(sys.argv[2], sys.argv[3], sys.argv[4],
+                 sys.argv[5] if len(sys.argv) > 5 else None)
+    elif action == 'update':
+        auto_update()
+```
+
+Progress line format to parse:
+```
+[download]  45.3% of 120.50MiB at 3.20MiB/s ETA 00:25
+```
+Extract: %, size, speed, ETA → update UI real-time.
+
+---
+
+## 💰 MONETIZATION (HALAL)
+
+### AdSense (Website + Windows WebView):
+- Apply: google.com/adsense
+- Approval: 1-3 days
+- Block categories: Gambling, Adult, Dating, Alcohol, Tobacco, Get Rich Quick
+- Windows: WebView loads ad-frame.html from website → AdSense runs
+
+### AdMob (Android):
+- Apply: admob.google.com
+- Approval: 2-7 days
+- Banner: 50dp bottom, always visible
+- Rewarded: playlist/subtitle/batch unlock
+
+### Hosting + Domain Cost:
+- Hosting: Vercel = FREE
+- Domain: mediadrop.site from Porkbun = ~$3/year
+- Total yearly cost: ~$3 only
+
+### Income Estimates:
+| Daily Users | Monthly Income |
+|---|---|
+| 500 | ~$60 |
+| 2,000 | ~$210 |
+| 10,000 | ~$1,050 |
+| 50,000 | ~$5,250 |
+
+---
+
+## 🔍 SEO + GEO (Website)
+
+### Technical SEO:
+- Next.js metadata API: title, description, keywords, OG tags, Twitter cards
+- JSON-LD Schema: SoftwareApplication + FAQPage + WebSite
+- sitemap.xml (auto via Next.js)
+- robots.txt
+- Canonical URLs
+- Core Web Vitals: LCP < 2.5s, CLS < 0.1 → Lighthouse SEO = 100
+
+### GEO (AI Search — ChatGPT/Claude/Perplexity):
+- llms.txt at root domain (AI crawlers read this)
+- Clear AI-readable About paragraph in footer
+- FAQ schema with 8+ Q&A
+- Comparison page: /compare (MediaDrop vs 4K Downloader, vs JDownloader)
+- Platform pages: /youtube-downloader, /tiktok-downloader, /instagram-downloader
+
+### Content Strategy:
+- H1: "Free Video Downloader for YouTube, TikTok, Instagram & More"
+- FAQ answers must be factual, direct, schema-marked
+- Monthly blog posts for fresh crawl signals
+
+### Free Traffic Sources:
+- Google SEO (long-term best)
+- Product Hunt submit
+- AlternativeTo.net listing
+- GitHub open source
+- Reddit: r/software, r/windows
+- Puson's own YouTube channel
+
+### Do NOT do:
+- Facebook paid ads (not profitable for ad-based free tools)
+- Any server-side video downloading (IP ban risk)
+
+---
+
+## 📦 FILE STRUCTURE
+
+### Windows:
+```
+mediadrop-windows/
+├── electron/ (main.js, preload.js, ipc-handlers.js)
+├── src/ (App.jsx, components/, hooks/, styles/)
+├── resources/bin/ (yt-dlp.exe, ffmpeg.exe, python/)
+├── scripts/downloader.py
+├── package.json, vite.config.js, tailwind.config.js
+└── electron-builder.config.js
+```
+
+### Android:
+```
+mediadrop-android/
+├── lib/ (screens/, widgets/, services/, theme/)
+├── assets/bin/yt-dlp-arm
+└── pubspec.yaml
+```
+
+### Website:
+```
+mediadrop-website/
+├── app/ (page.tsx, layout.tsx, sitemap.ts)
+├── components/ (Hero, Features, HowItWorks, FAQ, Footer)
+├── public/ (llms.txt, robots.txt, og-image.png)
+└── next.config.js
+```
+
+---
+
+## 🚀 LAUNCH CHECKLIST
+
+### Setup First:
+- [ ] AdSense account → apply with website
+- [ ] AdMob account → create Android app unit
+- [ ] Domain: mediadrop.site (Porkbun)
+- [ ] Play Store developer account ($25 one-time)
+
+### Launch Day:
+- [ ] Deploy website → Vercel
+- [ ] Add AdSense code to website
+- [ ] Build APK → upload Play Store
+- [ ] Build EXE → add download link on website
+- [ ] Add AdMob ID to APK
+
+### After Approval (1-7 days):
+- [ ] AdSense live → website earning ✅
+- [ ] AdMob live → APK earning ✅
+- [ ] Windows WebView ad live ✅
+
+---
+
+## ⚠️ CRITICAL RULES (Never Break)
+
+1. yt-dlp + ffmpeg + Python MUST be bundled inside app. Never rely on system install.
+2. Website NEVER downloads videos. Landing page only. No server-side downloading = no IP ban.
+3. All errors must be user-friendly. Never show raw Python/terminal errors.
+4. Ad categories blocked: Gambling, Adult, Dating, Alcohol, Tobacco.
+5. yt-dlp auto-updates weekly in background — this keeps all platforms working forever.
+6. Android: MANAGE_EXTERNAL_STORAGE permission required for Android 11+.
+7. Progress parsing must be real-time line-by-line from yt-dlp stdout.
+
+---
+
+## 📌 CURRENT STATUS
+
+- Full PRD: Completed ✅
+- Tech stack: Decided ✅
+- Design system: Decided ✅
+- Monetization: Planned ✅
+- SEO/GEO strategy: Planned ✅
+- Development: NOT STARTED YET — handing to Anti Gravity
+
+---
+
+## 💬 HOW TO USE THIS DOCUMENT
+
+**In a new Claude chat:**
+> "Read this document fully. I am Puson. This is my MediaDrop project context. I want to [specific task]. Help me."
+
+**In Anti Gravity:**
+> "Read this PRD fully. Build exactly as documented. Start with [Windows EXE / Android APK / Website]."
+
+**When you hit a bug:**
+> Copy the exact error message → paste it → say "Fix this error"
+
+**When context runs out:**
+> Start new chat → attach this file → continue
+
+---
+
+*Prepared by Claude (Anthropic) for Puson*
+*MediaDrop — Download Anything. Keep Everything.*
+
+* must be smooth experice for all work
